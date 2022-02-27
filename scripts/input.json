@@ -1,0 +1,7 @@
+{
+    "input": {
+        "method": "POST",
+        "path": ["cars"],
+        "user": "charlie"
+    }
+}

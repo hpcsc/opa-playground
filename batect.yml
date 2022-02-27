@@ -1,0 +1,41 @@
+project_name: opa-playground
+
+containers:
+  opa:
+    build_directory: ./.batect/opa
+    ports:
+    - 8181:8181
+    volumes:
+      - local: ./opa/config.yaml
+        container: /etc/opa/config.yaml
+        options: cached
+      - local: ./opa/rules
+        container: /app/opa/rules
+        options: cached
+      - local: ./opa/users
+        container: /app/opa/users
+        options: cached
+
+  nginx:
+    build_directory: .
+    dockerfile: ./.batect/nginx/Dockerfile
+    ports:
+    - 3112:80
+    working_directory: /app
+
+tasks:
+  test:
+    run:
+      container: opa
+      command: test -v /app
+
+  nginx:
+    run:
+      container: nginx
+
+  run:
+    dependencies:
+      - nginx
+    run:
+      container: opa
+      command: run -s -c /etc/opa/config.yaml

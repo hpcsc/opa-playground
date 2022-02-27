@@ -1,0 +1,8 @@
+services:
+  nginx:
+    url: http://nginx
+
+bundles:
+  authz:
+    service: nginx
+    resource: /opa/bundle.tar.gz
